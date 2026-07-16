@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import os
 import platform
 import shutil
@@ -12,6 +13,11 @@ from .cache import IconCache
 
 class RenderError(RuntimeError):
     pass
+
+
+def png_data_uri(path: Path) -> str:
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
 
 
 class IconRenderer:
