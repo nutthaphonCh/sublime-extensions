@@ -1,10 +1,12 @@
+import base64
 import struct
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
 from iconify.cache import IconCache
-from iconify.renderer import IconRenderer
+from iconify.renderer import IconRenderer, png_data_uri
 
 
 class FakeAPI:
@@ -18,6 +20,19 @@ class FakeAPI:
             'viewBox="0 0 24 24"><path fill="' + color + '" '
             'd="M4 4h16v16H4z"/></svg>'
         ).encode("utf-8")
+
+
+class DataURITests(unittest.TestCase):
+    def test_png_is_embedded_as_data_uri(self):
+        data = b"\x89PNG\r\n\x1a\nexample"
+        with tempfile.NamedTemporaryFile(suffix=".png") as image:
+            image.write(data)
+            image.flush()
+            uri = png_data_uri(Path(image.name))
+
+        prefix, encoded = uri.split(",", 1)
+        self.assertEqual("data:image/png;base64", prefix)
+        self.assertEqual(data, base64.b64decode(encoded))
 
 
 @unittest.skipUnless(sys.platform == "darwin", "bundled renderer test is for macOS")
