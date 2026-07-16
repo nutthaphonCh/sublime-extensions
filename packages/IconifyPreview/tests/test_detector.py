@@ -27,6 +27,17 @@ class DetectorTests(unittest.TestCase):
     def test_ignores_urls(self):
         self.assertEqual(find_tokens("https://iconify.design/docs"), [])
 
+    def test_ignores_data_urls(self):
+        self.assertEqual(find_tokens("data:image/png;base64,example"), [])
+
+    def test_ignores_tailwind_variants(self):
+        text = 'class="md:hidden md:flex hover:bg-red-500 peer-checked:block"'
+        self.assertEqual(find_tokens(text), [])
+
+    def test_ignores_time_ratios_ports_and_social_metadata(self):
+        text = "HH:mm 00:00 16:9 1:3001 og:title tw:image twitter:description"
+        self.assertEqual(find_tokens(text), [])
+
     def test_applies_document_offset(self):
         token = find_tokens("mdi:home", 120)[0]
         self.assertEqual((token.start, token.end), (120, 128))

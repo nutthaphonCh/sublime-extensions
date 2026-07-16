@@ -11,6 +11,10 @@ class IconifyError(RuntimeError):
     pass
 
 
+class IconNotFound(IconifyError):
+    pass
+
+
 class IconifyAPI:
     def __init__(self, base_url: str = "https://api.iconify.design", timeout: float = 5.0) -> None:
         self.base_url = base_url.rstrip("/")
@@ -29,6 +33,10 @@ class IconifyAPI:
                 if response.status != 200:
                     raise IconifyError(f"Iconify returned HTTP {response.status}")
                 data = response.read(2_000_001)
+        except urllib.error.HTTPError as error:
+            if error.code == 404:
+                raise IconNotFound("Iconify icon not found") from error
+            raise IconifyError(str(error)) from error
         except (urllib.error.URLError, TimeoutError, OSError) as error:
             raise IconifyError(str(error)) from error
         if len(data) > 2_000_000:

@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch
+from urllib.error import HTTPError
 
-from iconify.api import IconifyAPI, IconifyError
+from iconify.api import IconifyAPI, IconifyError, IconNotFound
 
 
 class APITests(unittest.TestCase):
@@ -21,6 +22,13 @@ class APITests(unittest.TestCase):
             "/search",
             {"query": "home", "limit": 1, "prefix": "mdi"},
         )
+
+    def test_404_is_reported_as_icon_not_found(self):
+        api = IconifyAPI()
+        error = HTTPError("https://example.test/missing.svg", 404, "Not Found", {}, None)
+        with patch("urllib.request.urlopen", side_effect=error):
+            with self.assertRaises(IconNotFound):
+                api.svg("missing", "icon", 18, "#fff")
 
 
 if __name__ == "__main__":

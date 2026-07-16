@@ -10,7 +10,7 @@ from typing import Callable, Optional
 import sublime
 import sublime_plugin
 
-from .iconify.api import IconifyAPI
+from .iconify.api import IconifyAPI, IconNotFound
 from .iconify.cache import IconCache
 from .iconify.detector import IconToken, find_tokens, token_at
 from .iconify.renderer import IconRenderer, png_data_uri
@@ -73,10 +73,14 @@ class IconService:
         self.executor = _executor
         self._lock = threading.Lock()
         self._renders: dict[tuple[str, int, str], Future[Path]] = {}
+        self._missing: set[str] = set()
 
     def render(self, icon: str, size: int, color: str, callback: Callable[[Optional[Path]], None]) -> None:
         key = (icon, size, color)
         with self._lock:
+            if icon in self._missing:
+                sublime.set_timeout(lambda: callback(None), 0)
+                return
             future = self._renders.get(key)
             if future is None:
                 future = self.executor.submit(self.renderer.render, icon, size, color)
@@ -87,6 +91,10 @@ class IconService:
                 self._renders.pop(key, None)
             try:
                 path: Optional[Path] = result.result()
+            except IconNotFound:
+                with self._lock:
+                    self._missing.add(icon)
+                path = None
             except Exception as error:
                 print(f"IconifyPreview: {icon}: {error}")
                 path = None

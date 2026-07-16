@@ -6,21 +6,78 @@ from typing import Iterable, Optional
 
 
 _COLON = re.compile(
-    r"(?<![\w:-])@?(?P<prefix>[a-z0-9]+(?:-[a-z0-9]+)*):"
+    r"(?<![\w:-])@?(?P<prefix>[a-z][a-z0-9]*(?:-[a-z0-9]+)*):"
     r"(?P<name>[a-z0-9]+(?:-[a-z0-9]+)*)(?![\w-])",
     re.IGNORECASE,
 )
 _BRACKET = re.compile(
-    r"(?<![\w-])(?:icon|i)-\[(?P<prefix>[a-z0-9]+(?:-[a-z0-9]+)*)"
+    r"(?<![\w-])(?:icon|i)-\[(?P<prefix>[a-z][a-z0-9]*(?:-[a-z0-9]+)*)"
     r"--(?P<name>[a-z0-9]+(?:-[a-z0-9]+)*)\]",
     re.IGNORECASE,
 )
 _UNO = re.compile(
-    r"(?<![\w-])i-(?P<identifier>[a-z0-9]+(?:-[a-z0-9]+)+)(?![\w-])",
+    r"(?<![\w-])i-(?P<identifier>[a-z][a-z0-9]*(?:-[a-z0-9]+)+)(?![\w-])",
     re.IGNORECASE,
 )
 
-_IGNORED_PREFIXES = frozenset(("http", "https", "file", "mailto"))
+_IGNORED_PREFIXES = frozenset(
+    (
+        # URI schemes that commonly occur in source files.
+        "data",
+        "file",
+        "http",
+        "https",
+        "mailto",
+        # Time formats and social/SEO metadata keys.
+        "hh",
+        "og",
+        "tw",
+        "twitter",
+        # Tailwind responsive, state, and feature variants.
+        "sm",
+        "md",
+        "lg",
+        "xl",
+        "2xl",
+        "hover",
+        "focus",
+        "focus-within",
+        "focus-visible",
+        "active",
+        "visited",
+        "target",
+        "first",
+        "last",
+        "only",
+        "odd",
+        "even",
+        "disabled",
+        "enabled",
+        "checked",
+        "required",
+        "valid",
+        "invalid",
+        "read-only",
+        "before",
+        "after",
+        "placeholder",
+        "selection",
+        "dark",
+        "portrait",
+        "landscape",
+        "motion-safe",
+        "motion-reduce",
+        "print",
+        "rtl",
+        "ltr",
+        "open",
+        "group-hover",
+        "group-focus",
+        "peer-hover",
+        "peer-focus",
+        "peer-checked",
+    )
+)
 _COMMON_HYPHENATED_PREFIXES = (
     "material-symbols-light",
     "material-symbols",
