@@ -8,7 +8,7 @@ from typing import Dict, Set
 import sublime
 import sublime_plugin
 
-from .vscode_settings.eslint import find_command
+from .vscode_settings.eslint import environment_with_node, find_command
 from .vscode_settings.mappings import eslint_fix_requested, sublime_settings
 from .vscode_settings.resolver import ResolvedSettings, SettingsResolver
 
@@ -140,6 +140,9 @@ def _run_eslint_fix(view: sublime.View, resolved: ResolvedSettings) -> None:
     except OSError:
         before = b""
     timeout = max(1, int(package.get("eslint_timeout", 30)))
+    environment = environment_with_node(
+        sublime.platform(), str(package.get("node_path", "")), root=resolved.root
+    )
 
     def execute() -> None:
         try:
@@ -151,6 +154,7 @@ def _run_eslint_fix(view: sublime.View, resolved: ResolvedSettings) -> None:
                 timeout=timeout,
                 check=False,
                 text=True,
+                env=environment,
             )
             after = Path(filename).read_bytes()
             if result.returncode not in (0, 1):

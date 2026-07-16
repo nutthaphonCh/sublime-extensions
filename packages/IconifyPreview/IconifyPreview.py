@@ -41,7 +41,9 @@ def _enabled(view: sublime.View) -> bool:
     if not bool(_setting(view, "enabled", True)):
         return False
     selector = str(_setting(view, "selector", "source, text.html, text.css"))
-    return view.match_selector(0, selector) or any(view.match_selector(point, selector) for point in view.sel())
+    return view.match_selector(0, selector) or any(
+        view.match_selector(region.begin(), selector) for region in view.sel()
+    )
 
 
 def _preview_color(view: sublime.View) -> str:

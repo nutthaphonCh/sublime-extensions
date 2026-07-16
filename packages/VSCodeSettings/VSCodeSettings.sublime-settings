@@ -6,6 +6,9 @@
     // source.fixAll.eslint through editor.codeActionsOnSave.
     "eslint_fix_on_save": true,
     "eslint_timeout": 30,
+    // Optional absolute path to node. Leave empty to auto-detect Homebrew,
+    // nvm, mise, fnm, or Volta when Sublime is launched from the macOS GUI.
+    "node_path": "",
     "eslint_extensions": [
         ".js", ".jsx", ".mjs", ".cjs",
         ".ts", ".tsx", ".mts", ".cts",
@@ -14,4 +17,3 @@
 
     "show_status": true
 }
-
