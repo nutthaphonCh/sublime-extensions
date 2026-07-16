@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "Iconify: Refresh Previews",
+        "command": "iconify_preview_refresh"
+    },
+    {
+        "caption": "Iconify: Toggle Previews for Current View",
+        "command": "iconify_preview_toggle"
+    }
+]

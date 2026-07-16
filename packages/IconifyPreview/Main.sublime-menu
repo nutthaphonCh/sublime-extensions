@@ -1,0 +1,37 @@
+[
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children": [
+            {
+                "caption": "Package Settings",
+                "id": "package-settings",
+                "children": [
+                    {
+                        "caption": "Iconify Preview",
+                        "children": [
+                            {
+                                "caption": "Settings",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/IconifyPreview/IconifyPreview.sublime-settings",
+                                    "default": "// Iconify Preview user settings\n{\n    $0\n}\n"
+                                }
+                            },
+                            { "caption": "-" },
+                            {
+                                "caption": "Refresh Previews",
+                                "command": "iconify_preview_refresh"
+                            },
+                            {
+                                "caption": "Toggle for Current View",
+                                "command": "iconify_preview_toggle"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

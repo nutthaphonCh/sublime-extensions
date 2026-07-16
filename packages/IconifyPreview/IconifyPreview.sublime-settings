@@ -1,0 +1,26 @@
+{
+    // Master switch. A view can override any setting with
+    // "iconify_preview.<name>" in view or project settings.
+    "enabled": true,
+
+    // Icon names are scanned only in these scopes.
+    "selector": "source, text.html, text.css",
+
+    "inline_preview": true,
+    "inline_size": 18,
+    "max_inline_previews": 100,
+    "hover_preview": true,
+    "hover_size": 96,
+
+    // "auto" follows the current syntax foreground. A CSS hex color can be
+    // used instead, for example "#7c3aed".
+    "color": "auto",
+
+    "debounce_ms": 250,
+    "completions": true,
+    "completion_min_chars": 2,
+    "completion_limit": 50,
+
+    "api_url": "https://api.iconify.design",
+    "request_timeout": 5.0
+}
