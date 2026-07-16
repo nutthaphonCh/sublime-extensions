@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Sublime Package"
+  short_description: "Scaffold and release packages in this repo"
+  default_prompt: "Use $create-sublime-package to add a Sublime Text package to this repository."
