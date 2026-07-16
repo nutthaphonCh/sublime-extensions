@@ -1,0 +1,39 @@
+{
+  "$schema": "sublime://packagecontrol.io/schemas/repository",
+  "schema_version": "4.0.0",
+  "packages": [
+    {
+      "name": "IconifyPreview",
+      "details": "https://github.com/nutthaphonCh/sublime-extensions",
+      "description": "Inline previews, hover previews, and completions for Iconify icon names.",
+      "author": "Nutthaphon Ch",
+      "readme": "https://raw.githubusercontent.com/nutthaphonCh/sublime-extensions/main/packages/IconifyPreview/README.md",
+      "issues": "https://github.com/nutthaphonCh/sublime-extensions/issues",
+      "labels": ["icon", "preview", "auto-complete"],
+      "releases": [
+        {
+          "asset": "IconifyPreview.sublime-package",
+          "sublime_text": ">=4050",
+          "python_versions": ["3.8"]
+        }
+      ]
+    },
+    {
+      "name": "VSCodeSettings",
+      "details": "https://github.com/nutthaphonCh/sublime-extensions",
+      "description": "Use the nearest .vscode/settings.json as shared workspace policy in Sublime Text.",
+      "author": "Nutthaphon Ch",
+      "readme": "https://raw.githubusercontent.com/nutthaphonCh/sublime-extensions/main/packages/VSCodeSettings/README.md",
+      "issues": "https://github.com/nutthaphonCh/sublime-extensions/issues",
+      "labels": ["settings", "formatting", "linting"],
+      "releases": [
+        {
+          "asset": "VSCodeSettings.sublime-package",
+          "sublime_text": ">=4050",
+          "python_versions": ["3.8"]
+        }
+      ]
+    }
+  ]
+}
+
