@@ -13,7 +13,7 @@ import sublime_plugin
 from .iconify.api import IconifyAPI
 from .iconify.cache import IconCache
 from .iconify.detector import IconToken, find_tokens, token_at
-from .iconify.renderer import IconRenderer
+from .iconify.renderer import IconRenderer, png_data_uri
 
 
 PACKAGE = "IconifyPreview"
@@ -169,9 +169,11 @@ def scan_view(view: sublime.View, generation: int) -> None:
 
 def _inline_phantom(token: IconToken, path: Path) -> sublime.Phantom:
     label = html.escape(token.icon, quote=True)
+    image = png_data_uri(path)
     content = (
-        "<body><style>body{margin:0 0 0 0.35rem}</style>"
-        f'<img src="{path.as_uri()}" title="{label}"></body>'
+        '<body id="iconify-preview-inline">'
+        "<style>body{margin:0 0 0 0.35rem}</style>"
+        f'<img src="{image}" title="{label}"></body>'
     )
     return sublime.Phantom(sublime.Region(token.end, token.end), content, sublime.LAYOUT_INLINE)
 
@@ -227,10 +229,12 @@ class IconifyPreviewListener(sublime_plugin.EventListener):
                 return
             label = html.escape(token.icon, quote=True)
             href = f"https://icon-sets.iconify.design/{token.prefix}/{token.name}/"
+            image = png_data_uri(path)
             body = (
-                "<body><style>body{padding:0.7rem;text-align:center}"
+                '<body id="iconify-preview-hover">'
+                "<style>body{padding:0.7rem;text-align:center}"
                 "p{margin:0.4rem 0 0 0}</style>"
-                f'<img src="{path.as_uri()}"><p><a href="{href}"><code>{label}</code></a></p></body>'
+                f'<img src="{image}"><p><a href="{href}"><code>{label}</code></a></p></body>'
             )
             view.show_popup(body, location=point, max_width=size + 80, max_height=size + 80)
 
