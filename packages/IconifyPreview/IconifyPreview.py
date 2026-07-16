@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+import importlib
 import re
 import threading
 from concurrent.futures import Future, ThreadPoolExecutor
@@ -10,10 +11,27 @@ from typing import Callable, Optional
 import sublime
 import sublime_plugin
 
-from .iconify.api import IconifyAPI, IconNotFound
-from .iconify.cache import IconCache
-from .iconify.detector import IconToken, find_tokens, token_at
-from .iconify.renderer import IconRenderer, png_data_uri
+from .iconify import api as _api_module
+from .iconify import cache as _cache_module
+from .iconify import detector as _detector_module
+from .iconify import renderer as _renderer_module
+
+
+# Package Control can replace package files while their imported modules remain
+# cached in Sublime's plugin host. Reload helpers before binding their symbols.
+_api_module = importlib.reload(_api_module)
+_cache_module = importlib.reload(_cache_module)
+_detector_module = importlib.reload(_detector_module)
+_renderer_module = importlib.reload(_renderer_module)
+
+IconifyAPI = _api_module.IconifyAPI
+IconNotFound = _api_module.IconNotFound
+IconCache = _cache_module.IconCache
+IconToken = _detector_module.IconToken
+find_tokens = _detector_module.find_tokens
+token_at = _detector_module.token_at
+IconRenderer = _renderer_module.IconRenderer
+png_data_uri = _renderer_module.png_data_uri
 
 
 PACKAGE = "IconifyPreview"

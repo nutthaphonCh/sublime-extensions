@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib
 import subprocess
 import threading
 from pathlib import Path
@@ -8,9 +9,26 @@ from typing import Dict, Set
 import sublime
 import sublime_plugin
 
-from .vscode_settings.eslint import environment_with_node, find_command
-from .vscode_settings.mappings import eslint_fix_requested, sublime_settings
-from .vscode_settings.resolver import ResolvedSettings, SettingsResolver
+from .vscode_settings import eslint as _eslint_module
+from .vscode_settings import jsonc as _jsonc_module
+from .vscode_settings import mappings as _mappings_module
+from .vscode_settings import resolver as _resolver_module
+
+
+# Sublime reloads plugin entrypoints after a Package Control upgrade, but may
+# retain imported package modules. Reload them so new entrypoints never bind to
+# stale helpers from the previous installed version.
+_jsonc_module = importlib.reload(_jsonc_module)
+_eslint_module = importlib.reload(_eslint_module)
+_mappings_module = importlib.reload(_mappings_module)
+_resolver_module = importlib.reload(_resolver_module)
+
+environment_with_node = _eslint_module.environment_with_node
+find_command = _eslint_module.find_command
+eslint_fix_requested = _mappings_module.eslint_fix_requested
+sublime_settings = _mappings_module.sublime_settings
+ResolvedSettings = _resolver_module.ResolvedSettings
+SettingsResolver = _resolver_module.SettingsResolver
 
 
 SETTINGS_FILE = "VSCodeSettings.sublime-settings"
