@@ -1,0 +1,63 @@
+name: Publish Sublime packages
+
+on:
+  push:
+    branches: [main]
+    tags: ["*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository and tags
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release tag
+        id: release
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            tag="$(git tag --list --sort=-version:refname | head -n 1)"
+          fi
+          if [[ -z "$tag" ]]; then
+            echo "No semantic-version tag exists; skipping release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists; skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check out tagged source
+        if: steps.release.outputs.skip == 'false'
+        run: git checkout --detach "${{ steps.release.outputs.tag }}"
+
+      - name: Build and verify packages
+        if: steps.release.outputs.skip == 'false'
+        run: python3 scripts/build_packages.py
+
+      - name: Create GitHub Release
+        if: steps.release.outputs.skip == 'false'
+        shell: bash
+        run: |
+          gh release create "${{ steps.release.outputs.tag }}" \
+            dist/IconifyPreview.sublime-package \
+            dist/VSCodeSettings.sublime-package \
+            --verify-tag \
+            --title "Sublime Extensions ${{ steps.release.outputs.tag }}" \
+            --notes "Initial Package Control release of IconifyPreview and VSCodeSettings."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
