@@ -1,0 +1,11 @@
+[
+    {
+        "caption": "VS Code Settings: Reload Workspace Settings",
+        "command": "vscode_settings_reload"
+    },
+    {
+        "caption": "VS Code Settings: Show Source for Current File",
+        "command": "vscode_settings_show_source"
+    }
+]
+

@@ -1,0 +1,30 @@
+[
+    {
+        "id": "preferences",
+        "children": [
+            {
+                "caption": "Package Settings",
+                "children": [
+                    {
+                        "caption": "VS Code Settings",
+                        "children": [
+                            {
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/VSCodeSettings/VSCodeSettings.sublime-settings",
+                                    "default": "{\n    $0\n}\n"
+                                },
+                                "caption": "Settings"
+                            },
+                            {
+                                "command": "vscode_settings_reload",
+                                "caption": "Reload Workspace Settings"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
+

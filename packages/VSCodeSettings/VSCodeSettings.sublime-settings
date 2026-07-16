@@ -1,0 +1,17 @@
+{
+    // Read the nearest .vscode/settings.json for every file.
+    "enabled": true,
+
+    // Run the workspace-local ESLint after save when VS Code requests
+    // source.fixAll.eslint through editor.codeActionsOnSave.
+    "eslint_fix_on_save": true,
+    "eslint_timeout": 30,
+    "eslint_extensions": [
+        ".js", ".jsx", ".mjs", ".cjs",
+        ".ts", ".tsx", ".mts", ".cts",
+        ".vue", ".svelte"
+    ],
+
+    "show_status": true
+}
+
